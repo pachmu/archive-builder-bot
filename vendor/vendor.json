@@ -1,0 +1,13 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "ViY5wN6KsQIbRVCCCDpL/P7xNuc=",
+			"path": "github.com/go-telegram-bot-api/telegram-bot-api",
+			"revision": "ec221ba9ea458cd5386c35dd90af04b8a895f8eb",
+			"revisionTime": "2018-12-25T21:56:58Z"
+		}
+	],
+	"rootPath": "github.com/pachmu/archive-builder-bot"
+}
