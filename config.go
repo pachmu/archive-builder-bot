@@ -1,4 +1,4 @@
-package archive_builder_bot
+package main
 
 import (
 	"gopkg.in/yaml.v2"
@@ -7,7 +7,22 @@ import (
 )
 
 type Config struct {
-	Token string `json:"token"`
+	Token                string   `yaml:"token"`
+	ProxyAddr            string   `yaml:"proxy-addr"`
+	ProxyUser            string   `yaml:"proxy-user"`
+	ProxyPassword        string   `yaml:"proxy-password"`
+	CloudJenkinsUrl      string   `yaml:"cloud-jenkins-url"`
+	CloudJenkinsUser     string   `yaml:"cloud-jenkins-user"`
+	CloudJenkinsPassword string   `yaml:"cloud-jenkins-password"`
+	ChmodJenkinsUrl      string   `yaml:"chmod-jenkins-url"`
+	ChmodJenkinsUser     string   `yaml:"chmod-jenkins-user"`
+	ChmodJenkinsPassword string   `yaml:"chmod-jenkins-password"`
+	TgUsers              []string `yaml:"tg-users"`
+	GitRepoCloneDir      string   `yaml:"git_repo_clone_dir"`
+	GitRepoUrl           string   `yaml:"git_repo_url"`
+	GitUser              string   `yaml:"git_user"`
+	GitEmail             string   `yaml:"git_email"`
+	GitPassword          string   `yaml:"git_password"`
 }
 
 func GetConfig(cfgPath string) (*Config, error) {

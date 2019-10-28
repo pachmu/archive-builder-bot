@@ -1,7 +1,9 @@
-package archive_builder_bot
+package main
 
 import (
 	"flag"
+	"fmt"
+	uuid "github.com/satori/go.uuid"
 	"log"
 	"time"
 
@@ -17,12 +19,35 @@ func main() {
 		log.Panic(err)
 		return
 	}
-	bot, err := tgbotapi.NewBotAPI(config.Token)
+	httpClient, err := ProxyHttpClient(config.ProxyAddr, config.ProxyUser, config.ProxyPassword)
 	if err != nil {
 		log.Panic(err)
 		return
 	}
-	handler := NewMessageHandler(bot)
+	bot, err := tgbotapi.NewBotAPIWithClient(config.Token, httpClient)
+	if err != nil {
+		log.Panic(err)
+		return
+	}
+
+	cloudJenkinsClient, err := GetNewJenkinsClinet(JenkinsParams{
+		JenkinsUrl: config.CloudJenkinsUrl,
+		Password:   config.CloudJenkinsPassword,
+		Username:   config.CloudJenkinsUser,
+	})
+	if err != nil {
+		log.Panic(err)
+		return
+	}
+	chmodJenkinsClient, err := GetNewJenkinsClinet(JenkinsParams{
+		JenkinsUrl: config.ChmodJenkinsUrl,
+		Password:   config.ChmodJenkinsPassword,
+		Username:   config.ChmodJenkinsUser,
+	})
+	if err != nil {
+		log.Panic(err)
+		return
+	}
 
 	bot.Debug = true
 
@@ -44,6 +69,19 @@ func main() {
 		if update.Message == nil {
 			continue
 		}
+		guid := uuid.NewV4()
+		repoDir := fmt.Sprintf(config.GitRepoCloneDir + guid.String())
+
+		handler := NewMessageHandler(
+			HandlerParams{
+				bot:                bot,
+				cloudJenkinsClient: cloudJenkinsClient,
+				chModJenkinsClient: chmodJenkinsClient,
+				git:                GetNewGitClient(config.GitRepoUrl, repoDir, config.GitUser, config.GitEmail, config.GitPassword),
+				archiveEditor:      GetNewArchiveEditor(repoDir),
+				users:              config.TgUsers,
+			},
+		)
 		go handler.Handle(update)
 	}
 }
