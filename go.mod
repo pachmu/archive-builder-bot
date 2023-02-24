@@ -7,7 +7,7 @@ require (
 	github.com/pachmu/gojenkins v0.2.0
 	github.com/satori/go.uuid v1.2.0
 	github.com/technoweenie/multipartstreamer v1.0.1 // indirect
-	golang.org/x/net v0.0.0-20190813141303-74dc4d7220e7
+	golang.org/x/net v0.7.0
 	gopkg.in/src-d/go-git.v4 v4.13.1
 	gopkg.in/yaml.v2 v2.2.2
 )
